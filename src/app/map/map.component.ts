@@ -34,6 +34,10 @@ export class MapComponent implements OnInit {
   currentStepGeometryIndex = 0;
   prevoiusCoord: number[];
   trafficLightMarker!: mapboxgl.Marker;
+  currAvgSpeed: any;
+  recommendation: any;
+  directionIconClass: any;
+
 
   constructor() {
     this.numDeltas = 100;
@@ -165,13 +169,13 @@ export class MapComponent implements OnInit {
       return 'traffic light';
 
     if (averageCurrentSpeed > 70)
-      return 'reaching max speed';
+      return '<i class="direction-guide-icon fas fa-arrow-up" style="color: green;font-size: 70px;"></i>  reaching max speed';
 
     if (averagePreviousSpeed > averageCurrentSpeed)
-      return `Slow speed down ..., ${instruction}`;
+      return `<i class="direction-guide-icon fas fa-arrow-down" style="color: red;font-size: 50px;"></i>  ${instruction}`;
 
     if (averagePreviousSpeed < averageCurrentSpeed)
-      return `Speed  up ..., ${instruction}`;
+      return `<i class="direction-guide-icon fas fa-arrow-up " style="color: green;font-size: 50px;"></i> ${instruction}`;
 
     return instruction;
   }
@@ -210,22 +214,44 @@ export class MapComponent implements OnInit {
 
 
           const drivingDir = this.extractArcs(steps[currentStepIndex]?.maneuver.modifier, ['right', 'left']);
-          let currAvgSpeed = this.getCurrSpeed(averageSpeed,speedIndex,steps[currentStepIndex].maneuver.type,currentPointIndex);
+          this.currAvgSpeed = this.getCurrSpeed(averageSpeed,speedIndex,steps[currentStepIndex].maneuver.type,currentPointIndex);
           let previousAvgSpeed = currSpeedList.length == 0 ? 0 : currSpeedList[currSpeedList.length-1];
           if(currentPointIndex == 0)
-            currSpeedList.push(currAvgSpeed);
+            currSpeedList.push(this.currAvgSpeed);
 
-          const recommendation = this.recommendationSystem(steps[currentStepIndex], previousAvgSpeed, currAvgSpeed);
-          const directionIconClass = this.getIconClass(currAvgSpeed, drivingDir);
+          this.recommendation = this.recommendationSystem(steps[currentStepIndex], previousAvgSpeed, this.currAvgSpeed);
+          this.directionIconClass = this.getIconClass(this.currAvgSpeed, drivingDir);
           // if (currentPointIndex === 0) {
-          this.popup.setHTML(`<div><span class="direction-guide-text">${recommendation}</span> 
-              <i class="${directionIconClass}" style='font-size:32px'></i>
-              </div> <div class="centered-speed colored-speed">${Number.isNaN(currAvgSpeed) ? 0 : currAvgSpeed} km/h </div>`
+          this.popup.setHTML(`
+            <div id="instructions-container" class="instructions-container">
+              <div class="text-center">
+              <div style=" width: 100%; display: flex; justify-content: center;">
+                  <div class="speedometer-container">
+                  <div class="speedometer-outer-circle"></div>
+                  <div class="speedometer-inner-circle"></div>
+                  <div class="speedometer-indicator" style="transform: rotate(${Number.isNaN(this.currAvgSpeed) ? 0 : this.currAvgSpeed}deg)"></div>
+                  <div class="speedometer-value">${Number.isNaN(this.currAvgSpeed) ? 0 : this.currAvgSpeed}</div>
+                  <div class="speedometer-units">km/h</div>
+                  <div class="speedometer-label">
+                    <span>Speed</span>
+                  </div>
+                </div>
+              </div>
+            
+                
+
+                <ul class="instructions-list">
+                <i class="${this.directionIconClass}" style='font-size:32px'></i>
+                  <span class="direction-guide-text instruction-item"">${this.recommendation}</span>
+                </ul>
+              </div>
+            </div>
+          `
           );
           //console.log(`index: ${currentStepIndex}, point index: ${speedIndex}, instruction: ${steps[currentStepIndex].maneuver.instruction}`)
           // }
           speedIndex++;
-          const timeoutDuration = this.getTimeout(currAvgSpeed);
+          const timeoutDuration = this.getTimeout(this.currAvgSpeed);
           let timeout = setTimeout(moveMarker, timeoutDuration);
           this.timeouts.push(timeout);
         }
@@ -304,18 +330,20 @@ export class MapComponent implements OnInit {
     if (currSpeed == 0)
       return 'fas fa-traffic-light';
 
-    return `direction-guide-icon fas fa-arrow-${drivingDir}`;
+    // return `direction-guide-icon fas fa-arrow-${drivingDir}`;
+    return ''
   }
 
   settingMarker(point: number[]) {
     const lngLatPosition: mapboxgl.LngLatLike = [point[0], point[1]];
     const el = document.createElement('div');
     el.className = 'marker';
-    let popupOptions = {
+    let popupOptions: any = {
       closeButton: false,
       closeOnClick: false,
-      offset: 25,
-      focusAfterOpen: false
+      focusAfterOpen: false,
+      anchor: 'bottom',
+      offset: { 'bottom': [-70, 370] }
     }
     this.popup = new mapboxgl.Popup(popupOptions).setText(
       '0 km/h'

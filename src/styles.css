@@ -47,3 +47,193 @@ div.mapboxgl-ctrl-top-left > div:nth-child(2) > div.suggestions-wrapper > ul {
     color: #9b4771; /* Replace with your desired color */
   }
   
+  .mapboxgl-popup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    text-align: center;
+  }
+  
+  .mapboxgl-popup-content {
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .instructions-container {
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    padding: 20px;
+    margin: 20px;
+    background-color:#595952 ;
+    border: 2px solid white;
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  
+  .instructions-heading {
+    color: #F9FEF4;
+  }
+  
+  .instructions-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+    color: #F9FEF4;
+  }
+  
+  .instruction-item {
+    margin-bottom: 10px;
+  }
+
+  .speedometer-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    background-color: #222;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+    color: #fff;
+    overflow: hidden;
+  }
+  
+  .speedometer-outer-circle {
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    background-color: #333;
+    border-radius: 50%;
+    opacity: 0.5;
+  }
+  
+  .speedometer-inner-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%; /* Adjust the top position to 50% */
+    left: 50%; /* Adjust the left position to 50% */
+    transform: translate(-50%, -50%); /* Center the element */
+    width: 50%; /* Adjust the width to your desired size */
+    height: 50%; /* Adjust the height to your desired size */
+    background-color: #111;
+    border-radius: 50%;
+    z-index: 1;
+  }
+  
+  /* ... Rest of the CSS code ... */
+    
+  /* .speedometer-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    background-color: #222;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+    color: #fff;
+    overflow: hidden;
+  }
+  
+  .speedometer-outer-circle {
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    background-color: #333;
+    border-radius: 50%;
+    opacity: 0.5;
+  }
+  
+  .speedometer-inner-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 25%; 
+    left: 25%;
+    width: 50%; 
+    height: 50%;
+    background-color: #111;
+    border-radius: 50%;
+    z-index: 1;
+  } */
+  
+  .speedometer-indicator {
+    position: absolute;
+    width: 5px;
+    height: 23%; /* Adjust the length of the needle here */
+    background-color: #ff6f00;
+    z-index: 2;
+    transition: transform 0.5s ease;
+    transform-origin: bottom center;
+    transform: translate(-50%, -100%);
+    left: 50%;
+    bottom: 50%;
+    margin-left: -2.3px; /* Half of the width of the needle */
+  }
+
+  .speedometer-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    font-size: 25px;
+    font-weight: bold;
+    z-index: 3;
+    text-align: center;
+    width: 100%;
+  }
+
+  .speedometer-units {
+    position: absolute;
+    bottom: 10px;
+    font-size: 16px;
+  }
+  
+  .speedometer-label {
+    position: absolute;
+    top: 10px;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  
+  .speedometer-label span {
+    display: block;
+  }
+
+  .speedometer-speed-up-arrow {
+    position: absolute;
+    top: 45%;
+    right: -15px;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 10px solid green;
+    z-index: 4;
+  }
+  
+  .speedometer-speed-down-arrow {
+    position: absolute;
+    top: 55%;
+    right: -15px;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid red;
+    z-index: 4;
+  }
